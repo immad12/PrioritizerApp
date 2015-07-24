@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Prioritizer</string>
+    <string name="app_name">List Prioritizer</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="welcome_title">Your To-Do lists:</string>
 </resources>
