@@ -1,5 +1,6 @@
 package dk.mlm.prioritizer;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -84,7 +85,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        // TODO Start new activity to create a list!
+        Intent intent = new Intent(this, AddListActivity.class);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                String result = (String) data.getSerializableExtra("parentList");
+                // Toast.makeText(getApplicationContext(), "Create List Worked", Toast.LENGTH_SHORT).show();
+                // TODO Change the list that is added
+                expandableListDetail.put(result, expandableListTitle);
+            }
+        }
     }
 
     @Override
