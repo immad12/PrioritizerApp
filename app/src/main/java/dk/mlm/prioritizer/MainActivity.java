@@ -22,8 +22,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private ExpandableListView expandableListView;
     private ExpandableListAdapter expandableListAdapter;
-    private List<String> expandableListTitle;
-    private Map<String, List<String>> expandableListDetail = new HashMap<>();
+    private List<ParentItem> expandableListTitle;
+    private Map<ParentItem, List<String>> expandableListDetail = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onGroupExpand(int groupPosition) {
                 Toast.makeText(getApplicationContext(), "The " +
-                                expandableListTitle.get(groupPosition) + " list is expanded",
+                                expandableListTitle.get(groupPosition).getName() + " list is expanded",
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onGroupCollapse(int groupPosition) {
                 Toast.makeText(getApplicationContext(), "The " +
-                                expandableListTitle.get(groupPosition) + " list is collapsed",
+                                expandableListTitle.get(groupPosition).getName() + " list is collapsed",
                         Toast.LENGTH_SHORT).show();
 
             }
@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                                         int groupPosition, int childPosition, long id) {
                 Toast.makeText(
                         getApplicationContext(),
-                        expandableListTitle.get(groupPosition)
+                        expandableListTitle.get(groupPosition).getName()
                                 + " -> "
                                 + expandableListDetail.get(
                                 expandableListTitle.get(groupPosition)).get(
@@ -93,14 +93,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                String result = (String) data.getSerializableExtra("parentList");
+                ParentItem result = (ParentItem) data.getSerializableExtra("parentList");
                 // Toast.makeText(getApplicationContext(), "Create List Worked", Toast.LENGTH_SHORT).show();
-                // TODO Change the list that is added
-                expandableListDetail.put(result, expandableListTitle);
+                expandableListDetail.put(result, result.getChildItems());
+
             }
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

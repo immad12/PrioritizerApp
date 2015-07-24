@@ -27,7 +27,7 @@ public class AddListActivity extends ActionBarActivity implements View.OnClickLi
     @Override
     public void onClick(View v)
     {
-        String listName = txtName.getText().toString();
+        ParentItem listName = new ParentItem(txtName.getText().toString());
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("parentList", listName);

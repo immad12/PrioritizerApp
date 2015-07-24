@@ -10,9 +10,14 @@ import java.util.Map;
  * Test data
  */
 public class ExpandableListData {
-    public static Map<String, List<String>> getData()
+    public static Map<ParentItem, List<String>> getData()
     {
-        Map<String, List<String>> expandableListDetail = new HashMap<>();
+        Map<ParentItem, List<String>> expandableListDetail = new HashMap<>();
+
+        ParentItem p1 = new ParentItem("TECHNOLOGY NEWS");
+        ParentItem p2 = new ParentItem("ENTERTAINMENT NEWS");
+        ParentItem p3 = new ParentItem("SCIENCE & ENVIRONMENT NEWS");
+
 
         List<String> technology = new ArrayList<String>();
         technology.add("Beats sued for noise-cancelling tech");
@@ -34,9 +39,9 @@ public class ExpandableListData {
 //        science.add("Rosetta's comet seen in close-up");
 //        science.add("Secret of sandstone shapes revealed");
 
-        expandableListDetail.put("TECHNOLOGY NEWS", technology);
-        expandableListDetail.put("ENTERTAINMENT NEWS", entertainment);
-        expandableListDetail.put("SCIENCE & ENVIRONMENT NEWS", science);
+        expandableListDetail.put(p1, technology);
+        expandableListDetail.put(p2, entertainment);
+        expandableListDetail.put(p3, science);
         return expandableListDetail;
     }
 }

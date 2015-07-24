@@ -19,11 +19,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter
 {
 
     private Context context;
-    private List<String> expandableListTitle;
-    private Map<String, List<String>> expandableListDetail;
+    private List<ParentItem> expandableListTitle;
+    private Map<ParentItem, List<String>> expandableListDetail;
 
-    public ExpandableListAdapter(Context context, List<String> expandableListTitle,
-                                 Map<String, List<String>> expandableListDetail) {
+    public ExpandableListAdapter(Context context, List<ParentItem> expandableListTitle,
+                                 Map<ParentItem, List<String>> expandableListDetail) {
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
@@ -79,7 +79,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter
     @Override
     public View getGroupView(int listPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-        String listTitle = (String) getGroup(listPosition);
+        ParentItem listTitle = (ParentItem) getGroup(listPosition);
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -88,7 +88,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter
         TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.BOLD);
-        listTitleTextView.setText(listTitle);
+        listTitleTextView.setText(listTitle.getName());
         return convertView;
     }
 
