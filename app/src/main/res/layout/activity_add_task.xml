@@ -6,35 +6,42 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="dk.mlm.prioritizerapp.AddListActivity">
+                tools:context="dk.mlm.prioritizer.AddTaskActivity">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Create a new To-Do List"
+        android:text="Create a new Task for: "
+        android:textSize="24dp"/>
+
+    <TextView
+        android:id="@+id/txtTaskListTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView3"
         android:textSize="24dp"/>
 
     <EditText
-        android:id="@+id/txtNameList"
+        android:id="@+id/txtNameTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView2"
-        android:hint="Enter Name for List"
+        android:layout_below="@+id/textView3"
+        android:hint="Enter Name for Task"
         android:paddingTop="30dp"/>
 
     <Button
-        android:id="@+id/buttonCreateList"
+        android:id="@+id/buttonCreateTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:text="Add List"/>
+        android:text="Add Task"/>
 
 </RelativeLayout>

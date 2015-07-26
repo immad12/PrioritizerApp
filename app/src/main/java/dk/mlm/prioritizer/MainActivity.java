@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ImageButton;
@@ -23,8 +24,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     // For saving and retrieving data
@@ -32,10 +36,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Editor prefsEditor;
     private List<ParentItem> savedDataLists;
 
+    // Open activity to create a task for dobbelt clicking a list
+    private boolean isDoubleTap = false;
+    private int previousGroupPosition = -1;
+
+    // To handle the ExpandableListView
     private ExpandableListView expandableListView;
     private ExpandableListAdapter expandableListAdapter;
     private List<ParentItem> expandableListTitle;
-    private Map<ParentItem, List<String>> expandableListDetail = new HashMap<>();
+    private Map<ParentItem, List<ChildItem>> expandableListDetail = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,27 +70,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(this, AddListActivity.class);
-        startActivityForResult(intent, 1);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                ParentItem result = (ParentItem) data.getSerializableExtra("parentList");
-                // Toast.makeText(getApplicationContext(), "Create List Worked", Toast.LENGTH_SHORT).show();
-                expandableListDetail.put(result, result.getChildItems());
-
-                // Save the new list for storage
-                expandableListTitle.add(result);
-                saveLists(expandableListTitle);
-            }
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
@@ -89,22 +77,28 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         expandableListAdapter = new ExpandableListAdapter(this, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
-        expandableListView.setOnGroupExpandListener(new OnGroupExpandListener() {
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                Toast.makeText(getApplicationContext(), "The " +
-                                expandableListTitle.get(groupPosition) + " list is expanded",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        expandableListView.setOnGroupCollapseListener(new OnGroupCollapseListener() {
+        final Intent taskIntent = new Intent(this, AddTaskActivity.class);
+        expandableListView.setOnGroupClickListener(new OnGroupClickListener() {
             @Override
-            public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(getApplicationContext(), "The " +
-                                expandableListTitle.get(groupPosition) + " list is collapsed",
-                        Toast.LENGTH_SHORT).show();
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (previousGroupPosition == groupPosition && isDoubleTap) {
+                    isDoubleTap = false;
+                    previousGroupPosition = -1;
 
+                    taskIntent.putExtra("ListName", expandableListTitle.get(groupPosition).getName());
+                    taskIntent.putExtra("groupPosition", groupPosition);
+                    taskIntent.putExtra("listSize", expandableListTitle.get(groupPosition).getChildItems().size());
+                    startActivityForResult(taskIntent, 2);
+
+                    return true;
+
+                } else {
+                    isDoubleTap = true;
+                    previousGroupPosition = groupPosition;
+
+                    return false;
+                }
             }
         });
 
@@ -118,12 +112,80 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                                 + " -> "
                                 + expandableListDetail.get(
                                 expandableListTitle.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT
+                                childPosition).getName(), Toast.LENGTH_SHORT
                 )
                         .show();
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(this, AddListActivity.class);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        ParentItem parentResult = null;
+
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                parentResult = (ParentItem) data.getSerializableExtra("parentList");
+                // Toast.makeText(getApplicationContext(), "Create List Worked", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                ChildItem childResult = (ChildItem) data.getSerializableExtra("childTask");
+                int position = data.getIntExtra("position", 0);
+                String listTitle = data.getStringExtra("listTitle");
+
+                if (listTitle.equals(expandableListTitle.get(position).getName())) {
+                    parentResult = expandableListTitle.get(position);
+                    parentResult.addChildItem(childResult);
+
+                    expandableListTitle.remove(position);
+                }
+                //parentResult = expandableListTitle.get(data.getIntExtra("position", 0));
+
+                //parentResult = childResult.getListName();
+
+                // Toast.makeText(getApplicationContext(), "Create List Worked", Toast.LENGTH_SHORT).show();
+                //expandableListDetail.put(result, result.getChildItems());
+
+                // Save the new list for storage
+                //expandableListTitle.add(result);
+                //saveLists(expandableListTitle);
+            }
+        }
+        if (parentResult != null) {
+            expandableListDetail.put(parentResult, parentResult.getChildItems());
+        }
+
+        // Save the new list for storage
+        // TODO multiple parentItems in the title list that is the same - but have to update the parentItem in the list
+        expandableListTitle.add(parentResult);
+        saveLists(expandableListTitle);
+        //expandabableListTitleSet.add(parentResult);
+        //   saveData(expandabableListTitleSet);
+    }
+
+    public void saveData(Set<ParentItem> object) {
+        Gson gson = new Gson();
+        String json = gson.toJson(object);
+        prefsEditor.putString("Set", json);
+        prefsEditor.commit();
+        Toast.makeText(getApplicationContext(), "Object saved", Toast.LENGTH_SHORT).show();
+    }
+
+    public Set<ParentItem> getData() {
+        Gson gson = new Gson();
+        String json = mPrefs.getString("Set", "");
+        Type type = new TypeToken<Set<ParentItem>>() {
+        }.getType();
+        Set<ParentItem> dataSet = gson.fromJson(json, type);
+        return dataSet;
     }
 
     // To save the lists in storage

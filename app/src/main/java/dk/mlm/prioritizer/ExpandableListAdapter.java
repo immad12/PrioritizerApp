@@ -20,10 +20,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter
 
     private Context context;
     private List<ParentItem> expandableListTitle;
-    private Map<ParentItem, List<String>> expandableListDetail;
+    private Map<ParentItem, List<ChildItem>> expandableListDetail;
+    private int priority = 1;
 
     public ExpandableListAdapter(Context context, List<ParentItem> expandableListTitle,
-                                 Map<ParentItem, List<String>> expandableListDetail) {
+                                 Map<ParentItem, List<ChildItem>> expandableListDetail) {
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
@@ -43,15 +44,22 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter
     @Override
     public View getChildView(int listPosition, final int expandedListPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-        final String expandedListText = (String) getChild(listPosition, expandedListPosition);
+        final ChildItem expandedListText = (ChildItem) getChild(listPosition, expandedListPosition);
+        //expandedListText.setPriority(priority++);
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_item, null);
         }
+
+        TextView priorityTextView = (TextView) convertView.findViewById(R.id.txtItemPriority);
+        priorityTextView.setText(expandedListText.getPriority()+"");
+
         TextView expandedListTextView = (TextView) convertView
                 .findViewById(R.id.expandedListItem);
-        expandedListTextView.setText(expandedListText);
+        expandedListTextView.setText(expandedListText.getName());
+
         return convertView;
     }
 
@@ -80,15 +88,18 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter
     public View getGroupView(int listPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         ParentItem listTitle = (ParentItem) getGroup(listPosition);
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_group, null);
         }
+
         TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.BOLD);
         listTitleTextView.setText(listTitle.getName());
+
         return convertView;
     }
 

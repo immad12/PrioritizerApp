@@ -10,7 +10,7 @@ import java.util.List;
 public class ParentItem implements Serializable
 {
     private String name;
-    private List<String> childItems;
+    private List<ChildItem> childItems;
 
     public ParentItem(String name){
         this.name = name;
@@ -27,12 +27,12 @@ public class ParentItem implements Serializable
         return name;
     }
 
-    public void addChildItem(String childItem)
+    public void addChildItem(ChildItem childItem)
     {
         childItems.add(childItem);
     }
 
-    public List<String> getChildItems()
+    public List<ChildItem> getChildItems()
     {
         return childItems;
     }
