@@ -15,20 +15,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.ExpandableListView.OnGroupCollapseListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     // For saving and retrieving data
@@ -147,16 +143,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
                     expandableListTitle.remove(position);
                 }
-                //parentResult = expandableListTitle.get(data.getIntExtra("position", 0));
-
-                //parentResult = childResult.getListName();
-
-                // Toast.makeText(getApplicationContext(), "Create List Worked", Toast.LENGTH_SHORT).show();
-                //expandableListDetail.put(result, result.getChildItems());
-
-                // Save the new list for storage
-                //expandableListTitle.add(result);
-                //saveLists(expandableListTitle);
             }
         }
         if (parentResult != null) {
@@ -164,28 +150,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
 
         // Save the new list for storage
-        // TODO multiple parentItems in the title list that is the same - but have to update the parentItem in the list
         expandableListTitle.add(parentResult);
         saveLists(expandableListTitle);
-        //expandabableListTitleSet.add(parentResult);
-        //   saveData(expandabableListTitleSet);
-    }
-
-    public void saveData(Set<ParentItem> object) {
-        Gson gson = new Gson();
-        String json = gson.toJson(object);
-        prefsEditor.putString("Set", json);
-        prefsEditor.commit();
-        Toast.makeText(getApplicationContext(), "Object saved", Toast.LENGTH_SHORT).show();
-    }
-
-    public Set<ParentItem> getData() {
-        Gson gson = new Gson();
-        String json = mPrefs.getString("Set", "");
-        Type type = new TypeToken<Set<ParentItem>>() {
-        }.getType();
-        Set<ParentItem> dataSet = gson.fromJson(json, type);
-        return dataSet;
     }
 
     // To save the lists in storage
