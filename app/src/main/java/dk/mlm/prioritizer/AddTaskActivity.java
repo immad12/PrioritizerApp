@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class AddTaskActivity extends ActionBarActivity implements View.OnClickListener {
+    private DatabaseHelper dbHelper;
+
     private EditText txtName;
     private TextView taskListTitle;
     private int groupPosition;
@@ -20,6 +22,8 @@ public class AddTaskActivity extends ActionBarActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+
+        dbHelper = new DatabaseHelper(this);
 
         // Information for the task
         Intent intent = getIntent();
@@ -36,12 +40,13 @@ public class AddTaskActivity extends ActionBarActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        ChildItem taskName = new ChildItem(txtName.getText().toString());
-        taskName.setPriority(++listSizeToPriority);
-        taskName.setListName(taskListTitle.getText().toString());
+        ChildItem task = new ChildItem(txtName.getText().toString());
+        task.setPriority(++listSizeToPriority);
+        task.setListName(taskListTitle.getText().toString());
+        task = dbHelper.insertTask(task);
 
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("childTask", taskName);
+        returnIntent.putExtra("childTask", task);
         returnIntent.putExtra("listTitle", taskListTitle.getText());
         returnIntent.putExtra("position", groupPosition);
         setResult(RESULT_OK, returnIntent);

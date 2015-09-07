@@ -25,11 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class MainActivity extends ActionBarActivity implements View.OnClickListener {
     // For saving and retrieving data
-    private SharedPreferences mPrefs;
-    private Editor prefsEditor;
+    private DatabaseHelper dbHelper;
     private List<ParentItem> savedDataLists;
 
     // Open activity to create a task for dobbelt clicking a list
@@ -48,14 +46,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         // For storing and retrieving data
-        mPrefs = getPreferences(MODE_PRIVATE);
-        prefsEditor = mPrefs.edit();
+        dbHelper = new DatabaseHelper(this);
 
         // Retrieve data from storage
-        savedDataLists = getLists();
+        savedDataLists = dbHelper.getAllLists();
         if (savedDataLists != null) {
-            for (int i = 0; i < savedDataLists.size(); i++) {
-                expandableListDetail.put(savedDataLists.get(i), savedDataLists.get(i).getChildItems());
+            for (ParentItem list : savedDataLists) {
+                expandableListDetail.put(list, list.getChildItems());
             }
         }
 
@@ -88,7 +85,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     startActivityForResult(taskIntent, 2);
 
                     return true;
-
                 } else {
                     isDoubleTap = true;
                     previousGroupPosition = groupPosition;
@@ -102,6 +98,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
+                // TODO Implement functionality for viewing and editing a task
                 Toast.makeText(
                         getApplicationContext(),
                         expandableListTitle.get(groupPosition).getName()
@@ -149,28 +146,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             expandableListDetail.put(parentResult, parentResult.getChildItems());
         }
 
-        // Save the new list for storage
         expandableListTitle.add(parentResult);
-        saveLists(expandableListTitle);
-    }
-
-    // To save the lists in storage
-    public void saveLists(List<ParentItem> object) {
-        Gson gson = new Gson();
-        String json = gson.toJson(object);
-        prefsEditor.putString("Lists", json);
-        prefsEditor.commit();
-        Toast.makeText(getApplicationContext(), "Object saved", Toast.LENGTH_SHORT).show();
-    }
-
-    // To retrieve the lists from storage
-    public List<ParentItem> getLists() {
-        Gson gson = new Gson();
-        String json = mPrefs.getString("Lists", "");
-        Type type = new TypeToken<List<ParentItem>>() {
-        }.getType();
-        List<ParentItem> lists = gson.fromJson(json, type);
-        return lists;
     }
 
     @Override

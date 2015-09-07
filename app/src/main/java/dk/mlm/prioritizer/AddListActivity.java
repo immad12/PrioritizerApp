@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class AddListActivity extends ActionBarActivity implements View.OnClickListener {
+    private DatabaseHelper dbHelper;
 
     private EditText txtName;
 
@@ -17,6 +18,8 @@ public class AddListActivity extends ActionBarActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_list);
+
+        dbHelper = new DatabaseHelper(this);
 
         txtName = (EditText) findViewById(R.id.txtNameList);
 
@@ -28,6 +31,7 @@ public class AddListActivity extends ActionBarActivity implements View.OnClickLi
     public void onClick(View v)
     {
         ParentItem listName = new ParentItem(txtName.getText().toString());
+        listName = dbHelper.insertList(listName);
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("parentList", listName);
