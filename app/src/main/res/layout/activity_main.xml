@@ -19,13 +19,14 @@
         android:textStyle="bold"
         android:layout_marginTop="6dp"/>
 
-    <ImageButton
+  <!--  <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_input_add"
         android:id="@+id/imageAddList"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"/>
+        -->
 
     <ExpandableListView
         android:id="@+id/expandableListView"
@@ -34,6 +35,6 @@
         android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
         android:divider="#A4C739"
         android:dividerHeight="0.5dp"
-        android:layout_below="@+id/imageAddList"/>
+        android:layout_below="@+id/textView"/>
 
 </RelativeLayout>
