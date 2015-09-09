@@ -1,13 +1,5 @@
 package dk.mlm.prioritizer;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
