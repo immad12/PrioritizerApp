@@ -1,11 +1,13 @@
 package dk.mlm.prioritizer;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -48,7 +50,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
         }
 
-       // ImageButton ibtnAddList = (ImageButton) findViewById(R.id.imageAddList);
+        // ImageButton ibtnAddList = (ImageButton) findViewById(R.id.imageAddList);
         //ibtnAddList.setOnClickListener(this);
 
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
@@ -107,7 +109,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        openListActivity();
+        //openListActivity();
+        setContentView(R.layout.activity_main);
     }
 
     public void openListActivity() {
@@ -162,6 +165,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 openListActivity();
                 return true;
             case R.id.action_settings:
+                return true;
+            case R.id.action_help:
+                //TODO show the layout for getting_started
+//                setContentView(R.layout.getting_started);
+//                Button btnBackToMain = (Button) findViewById(R.id.btnBack);
+//                btnBackToMain.setOnClickListener(this); //clear the contentview only - not working as planned
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

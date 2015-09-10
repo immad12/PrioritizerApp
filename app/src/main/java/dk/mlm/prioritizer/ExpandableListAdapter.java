@@ -1,11 +1,14 @@
 package dk.mlm.prioritizer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -15,13 +18,11 @@ import java.util.Map;
 /**
  * Created by ml on 24/07/15.
  */
-public class ExpandableListAdapter extends BaseExpandableListAdapter
-{
+public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<ParentItem> expandableListTitle;
     private Map<ParentItem, List<ChildItem>> expandableListDetail;
-    private int priority = 1;
 
     public ExpandableListAdapter(Context context, List<ParentItem> expandableListTitle,
                                  Map<ParentItem, List<ChildItem>> expandableListDetail) {
@@ -45,7 +46,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter
     public View getChildView(int listPosition, final int expandedListPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
         final ChildItem expandedListText = (ChildItem) getChild(listPosition, expandedListPosition);
-        //expandedListText.setPriority(priority++);
 
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context
@@ -54,7 +54,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter
         }
 
         TextView priorityTextView = (TextView) convertView.findViewById(R.id.txtItemPriority);
-        priorityTextView.setText(expandedListText.getPriority()+"");
+        priorityTextView.setText(expandedListText.getPriority() + "");
 
         TextView expandedListTextView = (TextView) convertView
                 .findViewById(R.id.expandedListItem);
