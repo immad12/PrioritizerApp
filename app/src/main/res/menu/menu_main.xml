@@ -4,21 +4,27 @@
       tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/action_addList"
         android:icon="@mipmap/ic_add_white_24dp"
         android:title="@string/action_addList"
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/action_addTask"
+        android:icon="@mipmap/ic_note_add_white_18dp"
+        android:title="Task"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_help"
         android:orderInCategory="100"
         android:title="@string/action_help"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
         app:showAsAction="never"/>
 
 </menu>
